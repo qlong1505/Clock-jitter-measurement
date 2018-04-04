@@ -37,11 +37,8 @@ ISR(TIMER1_OVF_vect)
 {
 	counter += 1;
 }
-
 unsigned long tcnt1; //variable to read timer 1 value
 char oldSREG; //store old config register
-
-
 float period = 0;	//amended to hold more than 65536 (could be nearly double this)
 void CLK_DECT()
 {
@@ -66,11 +63,10 @@ void CLK_DECT()
 
 	//reset counter of timer interrupt.
 	counter = 0;
-
 }
-void loop() {
+void loop() 
+{
 	// put your main code here, to run repeatedly:
 	//  Serial.println(counter);
 	//  delay(500);
-
 }

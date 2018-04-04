@@ -1,4 +1,4 @@
-C:\Users\qlong1505\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\uno\Debug\core\HardwareSerial1.cpp.o: \
+C:\Users\qlong\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\mega_atmega2560\Debug\core\HardwareSerial1.cpp.o: \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\HardwareSerial1.cpp \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\Arduino.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\binary.h \
@@ -9,6 +9,6 @@ C:\Users\qlong1505\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\uno\Debu
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\Print.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\Printable.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\USBAPI.h \
- C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\variants\standard/pins_arduino.h \
+ C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\variants\mega/pins_arduino.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\HardwareSerial_private.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino\wiring_private.h

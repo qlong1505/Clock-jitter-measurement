@@ -1,6 +1,6 @@
-C:\Users\qlong1505\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\uno\Debug\Clock-jitter-measurement.cpp.o: \
- C:\Users\qlong1505\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\uno\Debug\Clock-jitter-measurement.cpp \
- C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/arduino.h \
+C:\Users\qlong\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\mega_atmega2560\Debug\Clock-jitter-measurement.cpp.o: \
+ C:\Users\qlong\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\mega_atmega2560\Debug\Clock-jitter-measurement.cpp \
+ C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/Arduino.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/binary.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/WCharacter.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/WString.h \
@@ -10,6 +10,5 @@ C:\Users\qlong1505\AppData\Local\Temp\VMBuilds\Clock-jitter-measurement\uno\Debu
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/Printable.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/USBAPI.h \
  C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/Arduino.h \
- C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\variants\standard/pins_arduino.h \
- C:\Program\ Files\ (x86)\Microsoft\ Visual\ Studio\2017\Community\Common7\IDE\Extensions\kuedxvg2.nmj\Micro\ Platforms\default\debuggers\VM_DBG/VM_DBG.h \
- C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\cores\arduino/Arduino.h
+ C:\MATLAB\SupportPackages\R2015b\arduino-1.6.1\hardware\arduino\avr\variants\mega/pins_arduino.h \
+ C:\Program\ Files\ (x86)\Microsoft\ Visual\ Studio\2017\Community\Common7\IDE\Extensions\pbd1usl1.2ll\Micro\ Platforms\default\debuggers\VM_DBG/VM_DBG.h
