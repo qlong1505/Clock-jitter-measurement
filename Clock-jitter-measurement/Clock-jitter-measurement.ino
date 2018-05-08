@@ -2,6 +2,7 @@
 //Prescale = 1;
 // interrupt frequency = 16000000/65536
 const byte interruptPin = 2;
+int motorPin = 5;
 void setup()
 {
 	Serial.begin(9600);
@@ -26,6 +27,10 @@ void setup()
 	
 	//allow interrupt
 	sei();
+
+	// set PWM 5 dutycycle
+	pinMode(motorPin, OUTPUT);
+	analogWrite(motorPin,100);
 
 	//setup hardware interrupt
 	pinMode(interruptPin, INPUT_PULLUP);
