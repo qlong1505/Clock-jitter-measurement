@@ -39,7 +39,8 @@ void setup()
   
   
   //setup hardware interrupt
-  //if the internal pull-up resistor for pin 2 (interrupt 0) is enabled by adding the line:
+  //if the internal pull-up resistor for pin 2 
+  //(interrupt 0) is enabled by adding the line:
   pinMode(clkMeasuredPin, INPUT_PULLUP);
   
   attachInterrupt(digitalPinToInterrupt(clkMeasuredPin), CLK_DECT, RISING);
@@ -73,7 +74,9 @@ void CLK_DECT()
   SREG = oldSREG;
   
   //calculate clock input period, comment this part if you wanna calculate the period on server.
-  period = (counter*65536 + current_TCNT1 - previous_TCNT1)/16e6;
+
+  //1.0076 is an experiement value to calibrate the clock
+  period = (counter*65536 + current_TCNT1 - previous_TCNT1)/16e6*1.0076;
   
   //if (ARDUINO_STATE == RUN)
   {
@@ -85,7 +88,9 @@ void CLK_DECT()
   //push value in ringbuffer
 //    buffer.push(current_TCNT1);
 //    buffer.push(counter);
-    buffer.push(period);
+    
+    // push frequency into buffer
+    buffer.push(1/period);
 
   // store current value of timer01 to previous_TCNT1
   previous_TCNT1 = current_TCNT1;
@@ -129,7 +134,7 @@ void loop() {
             //Serial.print(buffer.available()); Serial.print(",");
             //Serial.print(buffer.shift()); Serial.print(",");
             //Serial.println(buffer.shift());
-            dtostrf(buffer.shift(), 4, 6, str);  //4 is mininum width, 6 is precision
+            dtostrf(buffer.shift(), 4, 8, str);  //4 is mininum width, 6 is precision
             //Serial.print("val: ");
             //Serial.println(val);
             //val += 5.0;
