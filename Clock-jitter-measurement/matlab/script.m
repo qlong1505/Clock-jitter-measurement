@@ -22,7 +22,12 @@ file = listACQ(folder{x,y});
 total_jitter=[];
 for i=1:length(file)
     data=readtable(file{i})
-    V = data.Channel1_V_;
+    if x==1
+        V = data.Channel1_V_;
+    end
+    if x==2
+        V = data.Channel2_V_;
+    end
     T = data.Time_s_;
     jitter = process(V,T);
     total_jitter = [total_jitter;jitter];
