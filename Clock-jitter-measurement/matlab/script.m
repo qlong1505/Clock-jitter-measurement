@@ -10,25 +10,26 @@ x = x(x<1.1*meanx & x>0.9*meanx);
 histogram(x,30);
 
 %% histogram of hardware measure jitter
-folder ={'1ms_bb_high_priority','1ms_bb_normal_priority','1ms_bb_low_priority';...
-    '1ms_rasp_high_priority','1ms_rasp_normal_priority','1ms_rasp_low_priority'}
+folder ={'BB_1_120s_high','BB_1_120s_norm','BB_1_120s_low';...
+    '1ms_rasp_high_priority','1ms_rasp_normal_priority','1ms_rasp_low_priority';...
+    '','Opi_1_120s_norm','Opi_1_120_low'}
 
-Q1 = 'Which platform?\n1.Beagle Bone Black (single core)\n2.Raspberry pi (multi cores)\n';
+Q1 = 'Which platform?\n1.Beagle Bone Black (single core)\n2.Raspberry pi (multi cores)\n3.Orange Pi (multicores)\n';
 x = input(Q1);
-Q2 ='Choose priority level:\n1.High\n2.Normal\n3.Low\n'
+Q2 ='Choose priority level:\n1.High\n2.Normal\n3.Low\n';
 y =input(Q2);
 file = listACQ(folder{x,y});
 
 total_jitter=[];
 for i=1:length(file)
     data=readtable(file{i})
-    if x==1
-        V = data.Channel1_V_;
-    end
-    if x==2
-        V = data.Channel2_V_;
-    end
+
+    % Logic data in 2nd column
+    V = data{:,2};
+    
+    % Time stamp data in Time_s_ column
     T = data.Time_s_;
+    
     jitter  = process(V,T);
     total_jitter = [total_jitter;jitter];
 end
@@ -62,25 +63,14 @@ hold off
 formatOut = 'yyyymmddHHMMSS';
 print(strcat('hist_',folder{x,y},datestr(now,formatOut)),'-dpng')
 save(strcat('clk_',folder{x,y},datestr(now,formatOut)),'clk')
-%%
-Q1 = 'Which platform?\n1.Beagle Bone Black (single core)\n2.Raspberry pi (multi cores)\n';
-x = input(Q1);
-Q2 ='Choose priority level:\n1.High\n2.Normal\n3.Low'
-y =input(Q2);
-folder{x,y}
-%%
-folder ={'1ms_bb_high_priority','1ms_bb_normal_priority','1ms_bb_low_priority';...
-    '1ms_rasp_high_priority','1ms_rasp_normal_priority','1ms_rasp_low_priority'}
 
-%%
-pd2 = makedist('HalfNormal','mu',mean(total_jitter),'sigma',std(total_jitter));
-x = random(pd2,length(total_jitter),1)
+
 
 %% open loop step response - load data
 OLdata=readtable('open_loop.csv');
 %%
 load('open_loop.mat');
-%%
+%% process data to plot open loop reponse
 T = OLdata.Time_s_(OLdata.Time_s_>=0);
 EncoderA = OLdata.Channel1_V_(find(OLdata.Time_s_>=0));
 EncoderB = OLdata.Channel2_V_(find(OLdata.Time_s_>=0));
@@ -103,8 +93,8 @@ T(1:2:end)=T1;
 T(2:2:end)=T2;
 %
 T = diff(T);
-T = diff(T2);
-%
+T = diff(T1);
+%git push
 Speed = T*24;
 %
 Speed = 1./Speed;
@@ -113,8 +103,21 @@ Speed = Speed*60; %rpm
 T = cumsum(T);
 %
 plot(T(T<0.5),Speed(find(T<0.5)));
-%%
+%% Plot the emperical model 
 K = 4543/5;
 tau = 0.042
 sys = tf(K,[tau 1])
 step(sys*5)
+
+%% testing disk writer model with 0.0001 sampling time
+A = [-20 0;1 0]
+B = [1;0]
+C = [0 1]
+D = 0;
+T = 0.0001;
+[b,a] = ss2tf(A,B,C,D);
+G = tf(b,a)
+dG = c2d(G,T)
+[A1,B1,C1,D1]=ssdata(dG)
+dG2 = ss(A,B,C,D,T)
+step(G)
