@@ -7,3 +7,75 @@ Gc = 150*(z-0.72)/(z+0.4);
 Gp = 0.00133*(z+0.75)/(z*(z-1)*(z-0.72));
 cl = feedback(Gc*Gp,1);
 step(cl)
+[A,B,C,D] = ssdata(cl);
+%% 25/12/2018 Run simulation multiple time and save to response mat file
+
+%set runtime for simulink model
+runtime = 0.2;
+
+%set number of runs
+n_run = 10000;
+
+%load clk source from hardware
+file ='clk_BB_1_120s_low20181224121948.mat'; 
+load(file);
+
+%split clock source into different pattern enough for runtime.
+clock_array_len = length(clk);
+
+tic
+pattern_index = find(clk(:,1)<runtime);
+pattern = clk(pattern_index,:);
+
+% pre-create memory to storage data.
+sim('Tape_motion_dynamic');% run the first time to check the size of response data
+response = zeros(length(ScopeData1.time),n_run+1,'double');
+
+% first column is time axes
+response(:,1)=ScopeData1.time;
+
+for i=1:10
+    
+    %return each index pattern which enough for runtime.
+    pattern = clk(pattern_index,:);
+    
+    %set 0 for the start value of time axe 
+    pattern(:,1)=pattern(:,1)-pattern(1,1)
+    
+    %call simulink
+    sim('Tape_motion_dynamic');
+    %plot(ScopeData1.time,ScopeData1.signals.values);
+    
+    response(:,i+1) = ScopeData1.signals.values;
+    
+    %increase index to 2, we start from rising edge
+    pattern_index = pattern_index +2;
+end
+save(strcat('response_',file),'response');
+toc
+%% test draw from matrix file
+% load data from random jitter
+file ='response_clk_BB_1_120s_high20181224122051.mat' ;
+load(file);
+% draw output response - RANDOM JITTER
+tic
+hold on
+for i=2:length(response(1,:))
+    plot(response(:,1),response(:,i));
+end
+% format plot
+xlabel('Time (s)')
+% ylabel('Speed (rpm)')
+title('ENVELOP OF OUTPUT RESPONSE')
+% legend('NO JITTER','JITTER');%,'JITTER 20%','JITTER 30%','JITTER 40%','Location','southeast');
+set(gca,'FontSize',30)
+%set(findall(gca, 'Type', 'Line'),'LineWidth',3);
+hold off
+grid on
+set(gcf, 'Position', [100, 100, 1280, 720])
+%axis([0 inf 0 1.3])
+clear rand_response
+clear rand_control
+formatOut = 'yyyymmddHHMMSS';
+print(file(1:(end-4)),'-dpng')
+toc
