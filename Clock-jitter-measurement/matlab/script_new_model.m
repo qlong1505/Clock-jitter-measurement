@@ -17,7 +17,7 @@ runtime = 0.2;
 n_run = 10000;
 
 %load clk source from hardware
-file ='clk_BB_1_120s_low20181224121948.mat'; 
+file ='clk_BB_1_120s_low20181225225238.mat'; 
 load(file);
 
 %split clock source into different pattern enough for runtime.
@@ -29,18 +29,24 @@ pattern = clk(pattern_index,:);
 
 % pre-create memory to storage data.
 sim('Tape_motion_dynamic');% run the first time to check the size of response data
-response = zeros(length(ScopeData1.time),n_run+1,'double');
+if n_run*2>=clock_array_len
+    Q2 ='CLOCK DATA IS TOO SHORT, PRESS CTRL+C NOW !';
+    y =input(Q2);
+else
+    response = zeros(length(ScopeData1.time),n_run+1,'double');    
+end
+
 
 % first column is time axes
 response(:,1)=ScopeData1.time;
 
-for i=1:10
+for i=1:n_run
     
     %return each index pattern which enough for runtime.
     pattern = clk(pattern_index,:);
     
     %set 0 for the start value of time axe 
-    pattern(:,1)=pattern(:,1)-pattern(1,1)
+    pattern(:,1)=pattern(:,1)-pattern(1,1);
     
     %call simulink
     sim('Tape_motion_dynamic');
@@ -55,27 +61,29 @@ save(strcat('response_',file),'response');
 toc
 %% test draw from matrix file
 % load data from random jitter
-file ='response_clk_BB_1_120s_high20181224122051.mat' ;
+file ='response_clk_BB_1_120s_norm20181225221250.mat' ;
 load(file);
 % draw output response - RANDOM JITTER
 tic
 hold on
+count=0
 for i=2:length(response(1,:))
     plot(response(:,1),response(:,i));
+    count = count +1
 end
 % format plot
 xlabel('Time (s)')
 % ylabel('Speed (rpm)')
 title('ENVELOP OF OUTPUT RESPONSE')
 % legend('NO JITTER','JITTER');%,'JITTER 20%','JITTER 30%','JITTER 40%','Location','southeast');
-set(gca,'FontSize',30)
+% set(gca,'FontSize',30)
 %set(findall(gca, 'Type', 'Line'),'LineWidth',3);
 hold off
 grid on
-set(gcf, 'Position', [100, 100, 1280, 720])
+% set(gcf, 'Position', [100, 100, 1280, 720])
 %axis([0 inf 0 1.3])
-clear rand_response
-clear rand_control
+clear response
+
 formatOut = 'yyyymmddHHMMSS';
 print(file(1:(end-4)),'-dpng')
 toc
