@@ -17,7 +17,7 @@ runtime = 0.2;
 n_run = 10000;
 
 %load clk source from hardware
-file ='clk_BB_1_120s_low20181225225238.mat'; 
+file ='clk_Opi_1_120s_norm20181225230330.mat'; 
 load(file);
 
 %split clock source into different pattern enough for runtime.
@@ -61,7 +61,7 @@ save(strcat('response_',file),'response');
 toc
 %% test draw from matrix file
 % load data from random jitter
-file ='response_clk_BB_1_120s_norm20181225221250.mat' ;
+file ='response_clk_Opi_1_120s_norm20181225230330.mat' ;
 load(file);
 % draw output response - RANDOM JITTER
 tic

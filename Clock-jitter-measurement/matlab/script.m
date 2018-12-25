@@ -12,7 +12,7 @@ histogram(x,30);
 %% histogram of hardware measure jitter
 folder ={'BB_1_120s_high','BB_1_120s_norm','BB_1_120s_low';...
     '1ms_rasp_high_priority','1ms_rasp_normal_priority','1ms_rasp_low_priority';...
-    '','Opi_1_120s_norm','Opi_1_120_low'}
+    'Opi_1_120_high','Opi_1_120s_norm','Opi_1_120_low'}
 
 Q1 = 'Which platform?\n1.Beagle Bone Black (single core)\n2.Raspberry pi (multi cores)\n3.Orange Pi (multicores)\n';
 x = input(Q1);
