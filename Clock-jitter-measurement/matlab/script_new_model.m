@@ -4,10 +4,15 @@
 Ts = 1/120
 z = tf('z',Ts);
 Gc = 150*(z-0.72)/(z+0.4);
+% Gc = 90*(z-0.72)/z;
+% Gc = 90*(z-0.72)/z;
 Gp = 0.00133*(z+0.75)/(z*(z-1)*(z-0.72));
 cl = feedback(Gc*Gp,1);
 step(cl)
 [A,B,C,D] = ssdata(cl);
+
+% rlocus(cl)
+% axis([-1.5 1.5 -1 1])
 %% 25/12/2018 Run simulation multiple time and save to response mat file
 
 %set runtime for simulink model
