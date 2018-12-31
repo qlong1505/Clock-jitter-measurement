@@ -1,8 +1,8 @@
-import Serial
+import serial
 import time
 import csv
 
-ser = Serial('com2',115200)
+ser = serial.Serial('com2',115200)
 ser.flushInput()
 
 while True:
@@ -10,7 +10,7 @@ while True:
         ser_bytes = ser.readline()
         decoded_bytes = float(ser_bytes[0:len(ser_bytes)-2].decode("utf-8"))
         print(decoded_bytes)
-        with open("test_data.csv","a") as f:
+        with open("test_data.csv","a",newline='') as f:
             writer = csv.writer(f,delimiter=",")
             writer.writerow([time.time(),decoded_bytes])
     except:
