@@ -3,12 +3,21 @@
 % Simulate model from Chapter 13, page 552, 
 Ts = 1/120
 z = tf('z',Ts);
-Gc = 150*(z-0.72)/(z+0.4);
-% Gc = 90*(z-0.72)/z;
+% Gc = 150*(z-0.72)/(z+0.4);
+Gc = 90*(z-0.72)/z;
 % Gc = 90*(z-0.72)/z;
 Gp = 0.00133*(z+0.75)/(z*(z-1)*(z-0.72));
 cl = feedback(Gc*Gp,1);
+cl2 = feedback(cl,1)
+% subplot(2,1,1)
 step(cl)
+% subplot(2,1,2)
+% impulse(cl)
+set(gca,'FontSize',30)
+set(findall(gca, 'Type', 'Line'),'LineWidth',2);
+xlabel('Time','FontSize',30)
+ylabel('Amplitude','FontSize',30)
+title('STEP RESPONSE','FontSize',30)
 [A,B,C,D] = ssdata(cl);
 
 % rlocus(cl)

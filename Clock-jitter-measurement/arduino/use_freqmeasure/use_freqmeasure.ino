@@ -1,5 +1,4 @@
 #include <FreqMeasure.h>
-
 void setup() {
   Serial.begin(115200);
   FreqMeasure.begin();
@@ -15,8 +14,8 @@ void loop() {
     count = count + 1;
     if (count > 1) {
       float frequency = FreqMeasure.countToFrequency(sum / count);
-      //float frequency = FreqMeasure.countToNanoseconds(sum / count);
-      Serial.println(frequency,5);
+    //  float frequency = FreqMeasure.countToNanoseconds(sum / count);
+      Serial.println(frequency*10000/10003,5);
       //Serial.println(F_CPU);
       sum = 0;
       count = 0;
