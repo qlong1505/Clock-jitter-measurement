@@ -197,17 +197,19 @@ clear n
 subplot(2,1,1);
 boxplot(data_risetime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
     'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
-    'Orange Pi - normal priority'},'orientation', 'horizontal');
-title('Risetime');
+    'Orange Pi - default priority'},'orientation', 'horizontal');
+%title('Risetime');
 xlabel('Time (s)');
 set(gca,'FontSize',20)
+ grid on
 subplot(2,1,2);
 boxplot(data_settletime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
     'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
-    'Orange Pi - normal priority'},'orientation', 'horizontal');
-title('Settletime');
+    'Orange Pi - default priority'},'orientation', 'horizontal');
+%title('Settletime');
 xlabel('Time (s)');
 set(gca,'FontSize',20)
+ grid on
 
 %% get ideal data
 runtime = 0.2;
