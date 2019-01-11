@@ -37,10 +37,14 @@ end
 clk = clock_generator(total_jitter);
 
 
-histogram(total_jitter,50);
-set(gca,'YScale','log')
+%histogram(total_jitter,50);
+histfit(total_jitter,50);
+%set(gca,'YScale','log')
 xlabel('Value') 
 ylabel('Counts') 
+set(gca,'FontSize',20)
+set(gcf, 'Position', [100, 100, 1280, 720])
+pd = fitdist(total_jitter,'Normal')
 hold on
 
 % normal distribution with mean is 1ms
@@ -61,7 +65,7 @@ hold on
 
 hold off
 formatOut = 'yyyymmddHHMMSS';
-print(strcat('hist_',folder{x,y},datestr(now,formatOut)),'-dpng')
+print(strcat('hist_',folder{x,y},datestr(now,formatOut)),'-dsvg')
 save(strcat('clk_',folder{x,y},datestr(now,formatOut)),'clk')
 
 

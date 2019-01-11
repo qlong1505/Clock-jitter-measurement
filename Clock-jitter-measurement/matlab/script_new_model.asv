@@ -198,15 +198,15 @@ subplot(2,1,1);
 boxplot(data_risetime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
     'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
     'Orange Pi - default priority'},'orientation', 'horizontal');
-title('Risetime');
+%title('Risetime');
 xlabel('Time (s)');
 set(gca,'FontSize',20)
  grid on
 subplot(2,1,2);
-boxplot(data_settletime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
+boxplot(data_settletime,'Whisker',10000,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
     'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
     'Orange Pi - default priority'},'orientation', 'horizontal');
-title('Settletime');
+%title('Settletime');
 xlabel('Time (s)');
 set(gca,'FontSize',20)
  grid on
@@ -216,3 +216,36 @@ runtime = 0.2;
 sim('Tape_motion_dynamic_ideal');
 plot(ScopeData1.time, ScopeData1.signals.values);
 s=stepinfo(ScopeData1.signals.values,ScopeData1.time);
+
+%% create pattern test
+a= 0:10;
+a = power(2,a);
+a = 1./a
+a1  =a/2
+a2 = a/2
+b  = zeros(1,length(a)*2)
+c = b;
+b(1:2:end)=a1;
+b(2:2:end)=a2;
+b = cumsum(b)
+c(1:2:end)=1
+clk = [[0;b'],[0;c']]
+sim('pattern_test');
+    header = "Times,Data\n";
+    fileID = fopen('pattern_test.csv','w');
+    fprintf(fileID,header);
+    fclose(fileID);
+    clear fileID;
+    clear header;
+dlmwrite('pattern_test.csv',[ScopeData.time,ScopeData.signals.values]...
+    ,'delimiter',',','-append');
+%%
+%histfit(data_settletime(:,1),50,'normal')
+%pd=fitdist(data_settletime(:,1),'beta')
+h = histogram(data_settletime(:,2));
+y = h.BinCounts;
+x = conv(h.BinEdges, [0.5 0.5], 'valid')
+plot(x,y);
+clk = [x',y'];
+sim('pattern_test');
+[ScopeData.time,ScopeData.signals.values]

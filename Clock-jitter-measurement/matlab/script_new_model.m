@@ -216,3 +216,36 @@ runtime = 0.2;
 sim('Tape_motion_dynamic_ideal');
 plot(ScopeData1.time, ScopeData1.signals.values);
 s=stepinfo(ScopeData1.signals.values,ScopeData1.time);
+
+%% create pattern test
+a= 0:10;
+a = power(2,a);
+a = 1./a
+a1  =a/2
+a2 = a/2
+b  = zeros(1,length(a)*2)
+c = b;
+b(1:2:end)=a1;
+b(2:2:end)=a2;
+b = cumsum(b)
+c(1:2:end)=1
+clk = [[0;b'],[0;c']]
+sim('pattern_test');
+    header = "Times,Data\n";
+    fileID = fopen('pattern_test.csv','w');
+    fprintf(fileID,header);
+    fclose(fileID);
+    clear fileID;
+    clear header;
+dlmwrite('pattern_test.csv',[ScopeData.time,ScopeData.signals.values]...
+    ,'delimiter',',','-append');
+%%
+%histfit(data_settletime(:,1),50,'normal')
+%pd=fitdist(data_settletime(:,1),'beta')
+h = histogram(data_settletime(:,2));
+y = h.BinCounts;
+x = conv(h.BinEdges, [0.5 0.5], 'valid')
+plot(x,y);
+clk = [x',y'];
+sim('pattern_test');
+[ScopeData.time,ScopeData.signals.values]
