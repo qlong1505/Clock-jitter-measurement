@@ -12,9 +12,9 @@ void loop() {
     // average several reading together
     sum = sum + FreqMeasure.read();
     count = count + 1;
-    if (count > 1) {
-      float frequency = FreqMeasure.countToFrequency(sum / count);
-    //  float frequency = FreqMeasure.countToNanoseconds(sum / count);
+    if (count >= 1) {
+    //  float frequency = FreqMeasure.countToFrequency(sum / count);
+      float frequency = FreqMeasure.countToNanoseconds(sum / count);
       Serial.println(frequency*10000/10003,5);
       //Serial.println(F_CPU);
       sum = 0;
