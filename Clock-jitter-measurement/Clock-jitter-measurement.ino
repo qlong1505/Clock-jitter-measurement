@@ -1,13 +1,15 @@
 
-//timer1 will interrupt when run full scale 16 bit (use TOV1 interrupt)
+//timer1 will interrupt when run full scale 16 bit (use TOV1 interrupt - timer overflow)
 //Prescale = 1;
 // interrupt frequency = 16000000/65536
-#define CIRCULAR_BUFFER_INT_SAFE
+#define CIRCULAR_BUFFER_XS
+//#define CIRCULAR_BUFFER_INT_SAFE
 #include <CircularBuffer.h>
-CircularBuffer<volatile float, 10> buffer;
-//#define CIRCULAR_BUFFER_XS 256
+CircularBuffer<volatile float, 100> buffer;
+
 
 const byte clkMeasuredPin = 2;
+
 enum STATE {RUN,STOP,UNCHANGE};
 STATE ARDUINO_STATE = RUN;
 
@@ -64,7 +66,7 @@ void CLK_DECT()
   //need to disable interrupt while reading timer01 value, store config register in a oldSRED
   oldSREG = SREG;
   
-  //disable interrupt
+  //disable interrupt before reading timer value.
   noInterrupts();
 
   //read current value of timer01 - 16bit
@@ -74,9 +76,7 @@ void CLK_DECT()
   SREG = oldSREG;
   
   //calculate clock input period, comment this part if you wanna calculate the period on server.
-
-  //1.0076 is an experiement value to calibrate the clock
-  period = (counter*65536 + current_TCNT1 - previous_TCNT1)/16e6*1.0076;
+  period = (counter*65536.0 + current_TCNT1 - previous_TCNT1)/16e6;
   
   //if (ARDUINO_STATE == RUN)
   {
@@ -90,7 +90,7 @@ void CLK_DECT()
 //    buffer.push(counter);
     
     // push frequency into buffer
-    buffer.push(1/period);
+    buffer.push(period);
 
   // store current value of timer01 to previous_TCNT1
   previous_TCNT1 = current_TCNT1;
@@ -98,8 +98,6 @@ void CLK_DECT()
   //reset counter of timer interrupt.
   counter = 0;
 }
-
-
 
   //declare variables for upload data to 
 //unsigned short dataSize;
@@ -134,12 +132,14 @@ void loop() {
             //Serial.print(buffer.available()); Serial.print(",");
             //Serial.print(buffer.shift()); Serial.print(",");
             //Serial.println(buffer.shift());
-            dtostrf(buffer.shift(), 4, 8, str);  //4 is mininum width, 6 is precision
+            dtostrf(buffer.shift(), 4, 6, str);  //4 is mininum width, 6 is precision
             //Serial.print("val: ");
             //Serial.println(val);
             //val += 5.0;
             valueString = str;
+            cli();
             Serial.println(valueString);
+            sei();
           //  dataSize--;
             //if (dataSize == 0) break;
         }

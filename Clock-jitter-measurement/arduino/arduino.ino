@@ -3,6 +3,7 @@
 //Prescale = 1;
 // interrupt frequency = 16000000/65536
 #define CIRCULAR_BUFFER_INT_SAFE
+#define BUFFER_SIZE 11
 #include <CircularBuffer.h>
 CircularBuffer<volatile float, 10> buffer;
 //#define CIRCULAR_BUFFER_XS 256
@@ -10,7 +11,8 @@ CircularBuffer<volatile float, 10> buffer;
 const byte clkMeasuredPin = 2;
 enum STATE {RUN,STOP,UNCHANGE};
 STATE ARDUINO_STATE = RUN;
-
+float data[BUFFER_SIZE];
+int index = 0;
 void setup()
 {
   //init Serial communication to PC
@@ -76,7 +78,7 @@ void CLK_DECT()
   //calculate clock input period, comment this part if you wanna calculate the period on server.
 
   //1.0076 is an experiement value to calibrate the clock
-  period = (counter*65536 + current_TCNT1 - previous_TCNT1)/16e6*1.0076;
+  period = (counter*65536 + current_TCNT1 - previous_TCNT1)/16e6;
   
   //if (ARDUINO_STATE == RUN)
   {
@@ -124,25 +126,24 @@ void loop() {
     //    Serial.print(buffer.shift());
     //    Serial.print(",");
     //}
+    if (index==BUFFER_SIZE)
+    {
+      index =0;
+      cli();
+      for(int i=0;i<BUFFER_SIZE;i++)
+      {
+        Serial.println(data[i],6);
+      }
+      sei();
+    }
     if (!buffer.isEmpty())
     {
-        //dataSize = buffer.size();
-        //while (1)
-            //  Serial.print(buffer.capacity()); Serial.print(",");
-        {
-          //  Serial.print(buffer.available()); Serial.print(",");
-            //Serial.print(buffer.available()); Serial.print(",");
-            //Serial.print(buffer.shift()); Serial.print(",");
-            //Serial.println(buffer.shift());
-            dtostrf(buffer.shift(), 4, 8, str);  //4 is mininum width, 6 is precision
-            //Serial.print("val: ");
-            //Serial.println(val);
-            //val += 5.0;
-            valueString = str;
-            Serial.println(valueString);
-          //  dataSize--;
-            //if (dataSize == 0) break;
-        }
+      dtostrf(buffer.shift(), 4, 6, str);  //4 is mininum width, 6 is precision
+      valueString = str;
+      Serial.println(valueString);
+      
+     // data[index] = buffer.shift();
+     // index++;       
     }
 }
 void serialEvent() 

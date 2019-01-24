@@ -18,6 +18,12 @@ Q1 = 'Which platform?\n1.Beagle Bone Black (single core)\n2.Raspberry pi (multi 
 x = input(Q1);
 Q2 ='Choose priority level:\n1.High\n2.Normal\n3.Low\n';
 y =input(Q2);
+Q3 ='2- Save figure with a special name, 1 - Save data, 0 - No save';
+z =input(Q3);
+if z==2
+    name = input('name of svg file: ','s');
+%     print(name,'-dsvg')
+end
 file = listACQ(folder{x,y});
 
 total_jitter=[];
@@ -64,10 +70,17 @@ hold on
 %         set(gca,'YScale','log')
 
 hold off
-formatOut = 'yyyymmddHHMMSS';
-print(strcat('hist_',folder{x,y},datestr(now,formatOut)),'-dsvg')
-save(strcat('clk_',folder{x,y},datestr(now,formatOut)),'clk')
-
+if z==1
+    formatOut = 'yyyymmddHHMMSS';
+    print(strcat('hist_',folder{x,y},datestr(now,formatOut)),'-dsvg')
+    save(strcat('clk_',folder{x,y},datestr(now,formatOut)),'clk')
+end
+axis([0 0.08 0 inf])
+xlabel('Sample time value');
+if z==2
+    %name = input('name of svg file: ','s');
+    print(name,'-dsvg')
+end
 
 
 %% open loop step response - load data

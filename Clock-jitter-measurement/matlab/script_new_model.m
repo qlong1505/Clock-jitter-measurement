@@ -111,11 +111,11 @@ data_risetime = [];
 data_settletime = [];
 for file_list=[...
         "response_clk_BB_1_120s_high20181225215231.mat" ...
-        "response_clk_BB_1_120s_low20181225225238.mat" ...
         "response_clk_BB_1_120s_norm20181225221250.mat" ...
+        "response_clk_BB_1_120s_low20181225225238.mat" ...
         "response_clk_Opi_1_120_high20181225233058.mat" ...
-        "response_clk_Opi_1_120_low20181225230436.mat"...
         "response_clk_Opi_1_120s_norm20181225230330.mat"...
+        "response_clk_Opi_1_120_low20181225230436.mat"...
         ]
     file =convertStringsToChars(file_list)
     header = "RiseTime,SettlingMax,SettlingMin,SettlingTime,Peak,PeakTime,Overshoot,Undershoot\n";
@@ -164,30 +164,32 @@ dlmwrite(strcat(file(1:(end-4)),'.csv'),[RiseTime',SettlingMax'...
     ,'delimiter',',','-append');
 
     subplot(3,4,n);
-    histogram(SettlingTime,100);
+    histogram(SettlingTime,40);
     set(gca,'YScale','log')
-    title(strcat('SettlingTime_',file(1:(end-4))),'Interpreter','none');
+    set(gca,'FontSize',14)
+    title(strcat('SettlingTime_',file(1:(end-18))),'Interpreter','none');
     n= n+1;
     subplot(3,4,n);
-    histogram(RiseTime,200);
+    histogram(RiseTime,40);
     set(gca,'YScale','log')
-    title(strcat('RiseTime_',file(1:(end-4))),'Interpreter','none');
+    set(gca,'FontSize',14)
+    title(strcat('RiseTime_',file(1:(end-18))),'Interpreter','none');
     n = n+1;
     %MEAN=[MEAN,mean(overshoots)];
     %STD=[STD,std(overshoots)];
 end
-figure;
-subplot(2,1,1);
-boxplot(data_risetime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
-    'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
-    'Orange Pi - normal priority'},'orientation', 'horizontal');
-title('Risetime');
-set(gca,'FontSize',20)
-subplot(2,1,2);
-boxplot(data_settletime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
-    'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
-    'Orange Pi - normal priority'},'orientation', 'horizontal');title('Settletime');
-set(gca,'FontSize',20)
+% figure;
+% subplot(2,1,1);
+% boxplot(data_risetime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
+%     'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
+%     'Orange Pi - normal priority'},'orientation', 'horizontal');
+% title('Risetime');
+% set(gca,'FontSize',20)
+% subplot(2,1,2);
+% boxplot(data_settletime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
+%     'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
+%     'Orange Pi - normal priority'},'orientation', 'horizontal');title('Settletime');
+% set(gca,'FontSize',20)
 clear RiseTime SettlingMax SettlingMin SettlingTime Peak PeakTime Overshoot Undershoot
 clear s data_size i file file_list
 clear MEAN STD
@@ -195,17 +197,17 @@ clear response
 clear n
 %% boxplot data
 subplot(2,1,1);
-boxplot(data_risetime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
-    'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
-    'Orange Pi - default priority'},'orientation', 'horizontal');
+boxplot(data_risetime,'Labels',{'BeagleBone - high priority','BeagleBone - default priority',...
+    'BeagleBone - low priority','Orange Pi - high priority','Orange Pi - default priority',...
+    'Orange Pi - low priority'},'orientation', 'horizontal');
 %title('Risetime');
 xlabel('Time (s)');
 set(gca,'FontSize',20)
  grid on
 subplot(2,1,2);
-boxplot(data_settletime,'Labels',{'BeagleBone - high priority','BeagleBone - low priority',...
-    'BeagleBone - default priority','Orange Pi - high priority','Orange Pi - low priority',...
-    'Orange Pi - default priority'},'orientation', 'horizontal');
+boxplot(data_settletime,'Labels',{'BeagleBone - high priority','BeagleBone - default priority',...
+    'BeagleBone - low priority','Orange Pi - high priority','Orange Pi - default priority',...
+    'Orange Pi - low priority'},'orientation', 'horizontal');
 %title('Settletime');
 xlabel('Time (s)');
 set(gca,'FontSize',20)
