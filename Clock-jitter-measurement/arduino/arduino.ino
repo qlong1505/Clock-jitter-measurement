@@ -3,7 +3,7 @@
 //Prescale = 1;
 // interrupt frequency = 16000000/65536
 #define CIRCULAR_BUFFER_INT_SAFE
-#define BUFFER_SIZE 11
+#define BUFFER_SIZE 1500
 #include <CircularBuffer.h>
 CircularBuffer<volatile float, 10> buffer;
 //#define CIRCULAR_BUFFER_XS 256
@@ -78,7 +78,8 @@ void CLK_DECT()
   //calculate clock input period, comment this part if you wanna calculate the period on server.
 
   //1.0076 is an experiement value to calibrate the clock
-  period = (counter*65536 + current_TCNT1 - previous_TCNT1)/16e6;
+  //period = (counter*65536.0 + current_TCNT1 - previous_TCNT1)/16e6;
+  period = (counter*65536.0 + current_TCNT1 - previous_TCNT1);//16e6;
   
   //if (ARDUINO_STATE == RUN)
   {
@@ -92,7 +93,8 @@ void CLK_DECT()
 //    buffer.push(counter);
     
     // push frequency into buffer
-    buffer.push(1/period);
+    //buffer.push(1.001/period);
+    buffer.push(period);
 
   // store current value of timer01 to previous_TCNT1
   previous_TCNT1 = current_TCNT1;
@@ -129,21 +131,23 @@ void loop() {
     if (index==BUFFER_SIZE)
     {
       index =0;
-      cli();
-      for(int i=0;i<BUFFER_SIZE;i++)
+        cli();
+      for(int i=1;i<=BUFFER_SIZE-1;i++)
       {
-        Serial.println(data[i],6);
+      
+        Serial.println(1.001*16e6/data[i],2);
+       delay(100);
       }
-      sei();
+          
     }
     if (!buffer.isEmpty())
     {
-      dtostrf(buffer.shift(), 4, 6, str);  //4 is mininum width, 6 is precision
+     /* dtostrf(buffer.shift(), 4, 6, str);  //4 is mininum width, 6 is precision
       valueString = str;
-      Serial.println(valueString);
+      Serial.println(valueString);*/
       
-     // data[index] = buffer.shift();
-     // index++;       
+      data[index] = buffer.shift();
+      index++;       
     }
 }
 void serialEvent() 

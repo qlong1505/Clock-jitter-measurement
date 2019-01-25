@@ -42,7 +42,7 @@ end
 
 clk = clock_generator(total_jitter);
 
-
+total_jitter = total_jitter(1:11000,1)
 %histogram(total_jitter,50);
 histfit(total_jitter,50);
 %set(gca,'YScale','log')
@@ -75,7 +75,7 @@ if z==1
     print(strcat('hist_',folder{x,y},datestr(now,formatOut)),'-dsvg')
     save(strcat('clk_',folder{x,y},datestr(now,formatOut)),'clk')
 end
-axis([0 0.08 0 inf])
+axis([0 0.01 0 inf])
 xlabel('Sample time value');
 if z==2
     %name = input('name of svg file: ','s');
